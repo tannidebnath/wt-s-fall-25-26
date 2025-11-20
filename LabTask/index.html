@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Grades</title>
+</head>
+<body>
+
+    <h1>Student Grades Manager</h1>
+    <p>Track and manage student grades efficiently</p>
+
+    <h2>Add New Student</h2>
+
+    <div>
+        <label for="studentName">Student Name:</label>
+        <input type="text" id="studentName" placeholder="Enter student name">
+    </div>
+
+    <div>
+        <label for="studentGrade">Grade (0-100):</label>
+        <input type="text" id="studentGrade" placeholder="Enter grade" min="0" max="100">
+    </div>
+          
+    <br>
+
+    <div>
+        <button onclick="manage('add')">Add Student</button>
+        <button onclick="manage('clear')">Clear List</button>
+    </div>
+
+    <h2>Statistics</h2>
+    <div id="stats">No students added yet</div>
+
+    <h2>Student List</h2>
+    <div id="studentList">No students added yet</div>
+
+    <br>
+    <button onclick="doubleGrades()">Double All Grades</button>
+    <button onclick="resetGrades()">Reset Grades</button>
+
+<script>
+    function manage(action) {
+        var name = document.getElementById("studentName").value;
+        var grade = document.getElementById("studentGrade").value;
+        var list = document.getElementById("studentList");
+        var stats = document.getElementById("stats");
+
+        if (action == "add") {
+            if (name == "" || grade == "" || grade < 0 || grade > 100) {
+                alert("Enter valid name and grade 0-100");
+                return;
+            }
+
+            if (list.innerHTML.includes("No students added yet")) {
+                list.innerHTML = "";
+            }
+
+            list.innerHTML += name + ": " + grade + " points<br>";
+
+            document.getElementById("studentName").value = "";
+            document.getElementById("studentGrade").value = "";
+
+            updateStats();
+        }
+
+        if (action == "clear") {
+            document.getElementById("stats").innerHTML = "No students added yet";
+            document.getElementById("studentList").innerHTML = "No students added yet";
+        }
+    }
+
+    function updateStats() {
+        var list = document.getElementById("studentList");
+        var stats = document.getElementById("stats");
+
+        var lines = list.innerHTML.split("<br>");
+        var total = 0, sum = 0, high = 0, low = 100, pass = 0;
+
+        for (var i = 0; i < lines.length - 1; i++) {
+            var g = Number(lines[i].split(": ")[1]?.split(" ")[0]);
+            if (!isNaN(g)) {
+                total++;
+                sum += g;
+                if (g > high) high = g;
+                if (g < low) low = g;
+                if (g >= 50) pass++;
+            }
+        }
+
+        if (total === 0) {
+            stats.innerHTML = "No students added yet";
+            return;
+        }
+
+        var avg = (sum / total).toFixed(2);
+        var p = ((pass / total) * 100).toFixed(2);
+
+        stats.innerHTML =
+            "Total Students: " + total + "<br><br>" +
+            "Average Grade: " + avg + "<br><br>" +
+            "Highest Grade: " + high + "<br><br>" +
+            "Lowest Grade: " + low + "<br><br>" +
+            "Pass Rate: " + p + "%<br><br>";
+    }
+
+    function doubleGrades() {
+        var list = document.getElementById("studentList");
+        if (list.innerHTML.includes("No students added yet")) {
+            alert("No students to update!");
+            return;
+        }
+
+        var lines = list.innerHTML.split("<br>");
+        var newList = "";
+
+        for (var i = 0; i < lines.length - 1; i++) {
+            var parts = lines[i].split(": ");
+            if (parts.length === 2) {
+                var name = parts[0];
+                var grade = Number(parts[1].split(" ")[0]);
+                if (!isNaN(grade)) {
+                    var newGrade = grade * 2;
+                    if (newGrade > 100) newGrade = 100;
+                    newList += name + ": " + newGrade + " points<br>";
+                }
+            }
+        }
+
+        list.innerHTML = newList;
+        updateStats();
+    }
+
+    function resetGrades() {
+        var list = document.getElementById("studentList");
+        if (list.innerHTML.includes("No students added yet")) {
+            alert("No students to reset!");
+            return;
+        }
+
+        var lines = list.innerHTML.split("<br>");
+        var newList = "";
+
+        for (var i = 0; i < lines.length - 1; i++) {
+            var parts = lines[i].split(": ");
+            if (parts.length === 2) {
+                var name = parts[0];
+                newList += name + ": 0 points<br>";
+            }
+        }
+
+        list.innerHTML = newList;
+        updateStats();
+    }
+</script>
+
+</body>
+</html>
