@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Portal Signup</title>
+    <style>
+        body {
+            font-family: Arial;
+            background-color: #f2f2f2;
+            padding: 20px;
+        }
+        form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+            margin: auto;
+            box-shadow: 0 0 10px gray;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+        }
+        span {
+            color: red;
+            font-size: 13px;
+        }
+        h2 {
+            text-align: center;
+        }
+        .success {
+            color: green;
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <form id="signupForm">
+        <h2>Student Portal Signup</h2>
+
+        <label>Full Name:</label><br>
+        <input type="text" id="name">
+        <span id="nameError"></span><br><br>
+
+        <label>Email:</label><br>
+        <input type="text" id="email">
+        <span id="emailError"></span><br><br>
+
+        <label>Password:</label><br>
+        <input type="password" id="password">
+        <span id="passwordError"></span><br><br>
+
+        <label>Confirm Password:</label><br>
+        <input type="password" id="confirmPassword">
+        <span id="confirmError"></span><br><br>
+
+        <label>Phone Number:</label><br>
+        <input type="text" id="phone">
+        <span id="phoneError"></span><br><br>
+
+        <button type="submit">Submit</button>
+
+        <p class="success" id="successMessage"></p>
+    </form>
+
+    <script>
+        const form = document.getElementById("signupForm");
+
+        form.addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            
+            let name = document.getElementById("name").value.trim();
+            let email = document.getElementById("email").value.trim();
+            let password = document.getElementById("password").value.trim();
+            let confirmPassword = document.getElementById("confirmPassword").value.trim();
+            let phone = document.getElementById("phone").value.trim();
+
+            
+            let nameError = document.getElementById("nameError");
+            let emailError = document.getElementById("emailError");
+            let passwordError = document.getElementById("passwordError");
+            let confirmError = document.getElementById("confirmError");
+            let phoneError = document.getElementById("phoneError");
+            let successMessage = document.getElementById("successMessage");
+
+           
+            nameError.innerText = "";
+            emailError.innerText = "";
+            passwordError.innerText = "";
+            confirmError.innerText = "";
+            phoneError.innerText = "";
+            successMessage.innerText = "";
+
+            let valid = true;
+
+            if (name === "") {
+                nameError.innerText = "Full name is required.";
+                valid = false;
+            }
+
+            if (email === "") {
+                emailError.innerText = "Email is required.";
+                valid = false;
+            } else if (!email.includes("@") || !email.includes(".")) {
+                emailError.innerText = "Invalid email format.";
+                valid = false;
+            }
+
+            
+            if (password.length < 6) {
+                passwordError.innerText = "Password must be at least 6 characters.";
+                valid = false;
+            }
+
+           
+            if (confirmPassword !== password) {
+                confirmError.innerText = "Passwords do not match.";
+                valid = false;
+            }
+
+           
+            if (phone === "") {
+                phoneError.innerText = "Phone number is required.";
+                valid = false;
+            } else if (isNaN(phone)) {
+                phoneError.innerText = "Phone number must contain only digits.";
+                valid = false;
+            }
+
+            
+            if (valid) {
+                successMessage.innerText = "Registration Successful!";
+                form.reset(); 
+            }
+        });
+    </script>
+
+</body>
+</html>
